@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components;
+using WorkHourPlus.Entities.Enums;
 using WorkHourPlus.Shared.DTOs;
 
 namespace WorkHourPlus.Components.Auth.Pages;
@@ -30,10 +31,14 @@ public partial class LoginPage : ComponentBase
             return;
         }
 
+        var employee = user.Role is nameof(Roles.Superadmin)
+            ? null
+            : await ServiceManager.EmployeeService.GetEmployeeById(user.EmployeeId ?? 0);
+
         List<Claim> claims = [
-            new Claim(ClaimTypes.Name, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, user.Role),
-            new Claim("EmployeeId", user.EmployeeId?.ToString()!),
+            new(ClaimTypes.Name, employee?.Name ?? user.Username),
+            new(ClaimTypes.Role, user.Role),
+            new("EmployeeId", user.EmployeeId?.ToString()!),
         ];
         
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

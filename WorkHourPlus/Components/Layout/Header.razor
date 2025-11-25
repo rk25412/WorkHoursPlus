@@ -1,8 +1,10 @@
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 <header>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <b>WorkHours+</b>
+                <span class="fw-bold">WorkHours+</span>
             </a>
             <button class="navbar-toggler" type="button">
                 <span class="navbar-toggler-icon"></span>
@@ -16,6 +18,13 @@
                         <a class="nav-link text-dark" href="/privacy">Privacy</a>
                     </li>
                 </ul>
+                <div class="flex gap-3">
+                    <AuthorizeView>
+                        <span class="fw-bolder">@context.User.FindFirstValue(ClaimTypes.Name)</span>
+                        <span class="mx-2">•</span>
+                        <a href="/logout">Logout</a>
+                    </AuthorizeView>
+                </div>
             </div>
         </div>
     </nav>

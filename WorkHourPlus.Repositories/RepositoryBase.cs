@@ -6,11 +6,11 @@ namespace WorkHourPlus.Repositories;
 
 public abstract class RepositoryBase<T>(RepositoryContext dbContext) : IRepositoryBase<T> where T: class
 {
-    public IQueryable<T> FindAll(bool trackChanges) => !trackChanges 
+    public IQueryable<T> FindAll(bool trackChanges = false) => !trackChanges
             ? dbContext.Set<T>().AsNoTracking() 
             : dbContext.Set<T>();
 
-    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges)
+    public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression, bool trackChanges = false)
         => !trackChanges
                 ? dbContext.Set<T>().Where(expression).AsNoTracking()
                 : dbContext.Set<T>().Where(expression);

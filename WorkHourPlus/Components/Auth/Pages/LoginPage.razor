@@ -4,7 +4,7 @@
 <EditForm Model="LoginModel" OnValidSubmit="@HandleSubmit" FormName="LoginForm">
   @if (!string.IsNullOrEmpty(_errorMessage))
   {
-    <h4 class="my-3">@_errorMessage</h4>
+    <h5 class="my-3 text-danger">@_errorMessage</h5>
   }
   <DataAnnotationsValidator/>
   <div class="form-outline mb-4">

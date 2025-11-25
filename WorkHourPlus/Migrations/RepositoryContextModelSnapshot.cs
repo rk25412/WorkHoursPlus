@@ -136,7 +136,7 @@ namespace WorkHourPlus.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int?>("EmployeeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Password")
@@ -153,13 +153,14 @@ namespace WorkHourPlus.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EmployeeId");
+
                     b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            EmployeeId = 0,
                             Password = "Superadmin",
                             Role = "Superadmin",
                             Username = "Superadmin"
@@ -217,6 +218,15 @@ namespace WorkHourPlus.Migrations
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("WorkHourPlus.Entities.Models.User", b =>
+                {
+                    b.HasOne("WorkHourPlus.Entities.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
                 });

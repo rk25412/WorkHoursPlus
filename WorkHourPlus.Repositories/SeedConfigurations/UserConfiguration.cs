@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using WorkHourPlus.Entities.Enums;
 using WorkHourPlus.Entities.Models;
 
 namespace WorkHourPlus.Repositories.SeedConfigurations;
@@ -15,7 +16,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
                 Username = "Superadmin",
                 Password = "Superadmin",
                 EmployeeId = 0,
-                Role = "Superadmin"
+                Role = nameof(Roles.Superadmin)
             }
         ]);
     }

@@ -9,7 +9,7 @@ public class UserRepository(RepositoryContext dbContext)
 {
     public async Task<User?> GetUserByUsername(string username)
     {
-        var user = await FindByCondition(x => x.Username!.ToLower() == username.ToLower(), false)
+        var user = await FindByCondition(x => x.Username!.ToLower() == username.ToLower())
             .FirstOrDefaultAsync();
         return user;
     }

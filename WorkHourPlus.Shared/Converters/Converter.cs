@@ -14,4 +14,14 @@ public static class Converter
                 : new UserDto(user.Id, user.Username!, user.Password!, user.Role!, user.EmployeeId);
         }
     }
+
+    extension(Employee? employee)
+    {
+        public EmployeeDto? ToEmployeeDto()
+        {
+            return employee is null
+                ? null
+                : new EmployeeDto(employee.Id, employee.Name, employee.Email, employee.GradeId, employee.RoleId, employee.ManagerId ?? 0);
+        }
+    }
 }
