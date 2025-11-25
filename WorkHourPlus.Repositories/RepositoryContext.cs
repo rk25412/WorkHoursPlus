@@ -1,0 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using WorkHourPlus.Entities.Models;
+
+namespace WorkHourPlus.Repositories;
+
+public sealed class RepositoryContext(DbContextOptions options) : DbContext(options)
+{
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Grade> Grades { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<Shift> Shifts { get; set; }
+    public DbSet<GradeRoleOvertimeRate> GradeRoleOvertimeRates { get; set; }
+}

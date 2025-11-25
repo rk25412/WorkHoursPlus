@@ -1,11 +1,15 @@
 using Radzen;
 using WorkHourPlus.Components;
+using WorkHourPlus.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddRadzenComponents();
+
+builder.Services.ConfigureRepositoryContext(builder.Configuration);
+builder.Services.ConfigureRepositoryManager();
 
 var app = builder.Build();
 
