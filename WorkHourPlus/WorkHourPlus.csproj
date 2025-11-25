@@ -11,4 +11,9 @@
     <PackageReference Include="Radzen.Blazor" Version="8.3.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WorkHourPlus.Repositories\WorkHourPlus.Repositories.csproj" />
+    <ProjectReference Include="..\WorkHourPlus.Services\WorkHourPlus.Services.csproj" />
+  </ItemGroup>
+
 </Project>
