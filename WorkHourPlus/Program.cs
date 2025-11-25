@@ -10,6 +10,7 @@ builder.Services.AddRadzenComponents();
 
 builder.Services.ConfigureRepositoryContext(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
+builder.Services.ConfigureServiceManager();
 
 var app = builder.Build();
 
