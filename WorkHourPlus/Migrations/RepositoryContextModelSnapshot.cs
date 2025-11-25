@@ -30,6 +30,9 @@ namespace WorkHourPlus.Migrations
                     b.Property<int>("GradeId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("ManagerId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -40,6 +43,8 @@ namespace WorkHourPlus.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("GradeId");
+
+                    b.HasIndex("ManagerId");
 
                     b.HasIndex("RoleId");
 
@@ -120,10 +125,45 @@ namespace WorkHourPlus.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Shifts");
+                });
+
+            modelBuilder.Entity("WorkHourPlus.Entities.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            EmployeeId = 0,
+                            Password = "Superadmin",
+                            Role = "Superadmin",
+                            Username = "Superadmin"
+                        });
                 });
 
             modelBuilder.Entity("WorkHourPlus.Entities.Models.Employee", b =>
@@ -134,6 +174,10 @@ namespace WorkHourPlus.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WorkHourPlus.Entities.Models.Employee", "Manager")
+                        .WithMany("ReportingEmployees")
+                        .HasForeignKey("ManagerId");
+
                     b.HasOne("WorkHourPlus.Entities.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
@@ -141,6 +185,8 @@ namespace WorkHourPlus.Migrations
                         .IsRequired();
 
                     b.Navigation("Grade");
+
+                    b.Navigation("Manager");
 
                     b.Navigation("Role");
                 });
@@ -167,8 +213,8 @@ namespace WorkHourPlus.Migrations
             modelBuilder.Entity("WorkHourPlus.Entities.Models.Shift", b =>
                 {
                     b.HasOne("WorkHourPlus.Entities.Models.Employee", "Employee")
-                        .WithOne("Shift")
-                        .HasForeignKey("WorkHourPlus.Entities.Models.Shift", "EmployeeId")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -177,7 +223,7 @@ namespace WorkHourPlus.Migrations
 
             modelBuilder.Entity("WorkHourPlus.Entities.Models.Employee", b =>
                 {
-                    b.Navigation("Shift");
+                    b.Navigation("ReportingEmployees");
                 });
 #pragma warning restore 612, 618
         }

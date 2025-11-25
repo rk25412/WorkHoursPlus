@@ -6,4 +6,8 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\WorkHourPlus.Entities\WorkHourPlus.Entities.csproj" />
+    </ItemGroup>
+
 </Project>

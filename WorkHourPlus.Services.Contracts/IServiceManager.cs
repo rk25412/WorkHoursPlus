@@ -7,4 +7,5 @@ public interface IServiceManager
     IGradeRoleOvertimeRateService GradeRoleOvertimeRateService { get; }
     IRoleService RoleService { get; }
     IShiftService ShiftService { get; }
+    IUserService UserService { get; }
 }

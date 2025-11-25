@@ -8,7 +8,11 @@ public sealed class Employee
     [Required] public int GradeId { get; set; }
     [Required] public int RoleId { get; set; }
     
+    public int? ManagerId { get; set; }
+    
+    [ForeignKey(nameof(ManagerId))] public Employee? Manager { get; set; }
     [ForeignKey(nameof(GradeId))] public Grade? Grade { get; set; }
     [ForeignKey(nameof(RoleId))] public Role? Role { get; set; }
-    public Shift? Shift { get; set; }
+
+    public List<Employee> ReportingEmployees { get; set; } = [];
 }

@@ -1,5 +1,6 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -11,3 +12,9 @@
 @using WorkHourPlus.Components.Layout
 @using Radzen
 @using Radzen.Blazor
+@using WorkHourPlus.Contracts
+@using WorkHourPlus.Services.Contracts
+@inject IServiceManager ServiceManager
+@inject NavigationManager NavigationManager
+@attribute [Authorize]
+

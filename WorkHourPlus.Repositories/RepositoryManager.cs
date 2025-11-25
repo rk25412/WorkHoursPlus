@@ -10,11 +10,13 @@ public sealed class RepositoryManager(RepositoryContext dbContext) : IRepository
         = new(() => new GradeRoleOvertimeRateRepository(dbContext));
     private readonly Lazy<IRoleRepository> _roleRepository = new(() => new RoleRepository(dbContext));
     private readonly Lazy<IShiftRepository>  _shiftRepository = new(() => new ShiftRepository(dbContext));
+    private readonly Lazy<IUserRepository>  _userRepository = new(() => new UserRepository(dbContext));
     
     public IEmployeeRepository EmployeeRepository => _employeeRepository.Value;
     public IGradeRepository GradeRepository => _gradeRepository.Value;
     public IGradeRoleOvertimeRateRepository GradeRoleOvertimeRateRepository => _gradeRoleOvertimeRateRepository.Value;
     public IRoleRepository RoleRepository => _roleRepository.Value;
     public IShiftRepository ShiftRepository => _shiftRepository.Value;
+    public IUserRepository UserRepository => _userRepository.Value;
     public void Save() => dbContext.SaveChanges();
 }

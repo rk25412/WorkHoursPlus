@@ -7,5 +7,6 @@ public interface IRepositoryManager
     IGradeRoleOvertimeRateRepository GradeRoleOvertimeRateRepository { get; }
     IRoleRepository RoleRepository { get; }
     IShiftRepository ShiftRepository { get; }
+    IUserRepository UserRepository { get; }
     void Save();
 }
