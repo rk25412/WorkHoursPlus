@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using WorkHourPlus.Entities.Models;
 using WorkHourPlus.Shared.DTOs;
 
@@ -22,6 +23,32 @@ public static class Converter
             return employee is null
                 ? null
                 : new EmployeeDto(employee.Id, employee.Name, employee.Email, employee.GradeId, employee.RoleId, employee.ManagerId ?? 0);
+        }
+    }
+
+    extension(IEnumerable<Employee> employees)
+    {
+        public IEnumerable<EmployeeDto> ToEmployeeDto()
+        {
+            return employees.Select(x => x.ToEmployeeDto()!);
+        }
+    }
+
+    extension(Grade? grade)
+    {
+        public GradeDto? ToGradeDto()
+        {
+            return grade is null
+                ? null
+                : new GradeDto(grade.Id, grade.Name);
+        }
+    }
+
+    extension(IEnumerable<Grade> grades)
+    {
+        public IEnumerable<GradeDto> ToGradeDto()
+        {
+            return grades.Select(ToGradeDto);
         }
     }
 }

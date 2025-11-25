@@ -5,4 +5,7 @@ public record EmployeeDto(int Id,
         string Email,
         int GradeId,
         int RoleId,
-        int ManagerId);
+        int ManagerId,
+        GradeDto? Grade = null,
+        RoleDto? Role = null,
+        EmployeeDto? Manager = null);

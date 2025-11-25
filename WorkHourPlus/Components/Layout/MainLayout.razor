@@ -1,19 +1,34 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
+@inherits LayoutComponentBase
 
 <RadzenComponents/>
 
-<Header></Header>
-
-<div class="container">
-    <main role="main" class="pb-3">
-        @Body
-    </main>
-</div>
-
-<Footer></Footer>
-
+<CascadingValue Value="_currentEmployeeId" Name="CurrentEmployeeId" IsFixed="true">
+    <Header></Header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @Body
+        </main>
+    </div>
+    <Footer></Footer>
+</CascadingValue>
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code {
+    [CascadingParameter]
+    public required Task<AuthenticationState> AuthenticationState { get; set; }
+
+    private int _currentEmployeeId = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationState;
+        _currentEmployeeId = Convert.ToInt32(authState.User.FindFirstValue("EmployeeId"));
+    }
+
+}
