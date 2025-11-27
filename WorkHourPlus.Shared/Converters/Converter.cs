@@ -44,11 +44,11 @@ public static class Converter
         }
     }
 
-    extension(IEnumerable<Grade> grades)
+    extension(List<Grade> grades)
     {
-        public IEnumerable<GradeDto> ToGradeDto()
+        public List<GradeDto> ToGradeDto()
         {
-            return grades.Select(ToGradeDto);
+            return [.. grades.Select(x => x.ToGradeDto()!)];
         }
     }
 }

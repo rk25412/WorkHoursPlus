@@ -1,0 +1,58 @@
+@using WorkHourPlus.Shared.DTOs
+
+<RadzenTemplateForm Data="@_addEditEmployeeDto" Submit="Submit" TItem="AddEditEmployeeDto">
+    <div class="row">
+        <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <div class="form-group">
+                <RadzenLabel Component="EmployeeName" Text="Name" />
+                <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Name" class="form-control" id="EmployeeName" />
+                <RadzenRequiredValidator Component="EmployeeName" Text="Name is required" Style="color:red" />
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <div class="form-group">
+                <RadzenLabel Component="EmployeeEmail" Text="Email" />
+                <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Email" class="form-control" id="EmployeeEmail" />
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 mb-2">
+            <div class="form-group">
+                <RadzenLabel Component="Grade" Text="Email" />
+                <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Email" class="form-control" id="Grade" />
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end">
+        <RadzenButton ButtonType="ButtonType.Submit" Style="margin-right: 10px;" Text="Save" />
+        <RadzenButton ButtonType="ButtonType.Button" Click="@(args => DialogService.Close(null))" Text="Cancel" />
+    </div>
+</RadzenTemplateForm>
+
+
+@code {
+
+    [Parameter] public EmployeeDto? EmployeeDto { get; set; }
+
+    private AddEditEmployeeDto _addEditEmployeeDto = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (EmployeeDto is not null)
+        {
+            _addEditEmployeeDto = new AddEditEmployeeDto()
+            {
+                Id = EmployeeDto.Id,
+                Name = EmployeeDto.Name,
+                Email = EmployeeDto.Email,
+                GradeId = EmployeeDto.GradeId,
+                RoleId = EmployeeDto.RoleId,
+                ManagerId = EmployeeDto.ManagerId
+            };
+        }
+    }
+
+    private void Submit(AddEditEmployeeDto addEditEmployeeDto)
+    {
+
+    }
+}

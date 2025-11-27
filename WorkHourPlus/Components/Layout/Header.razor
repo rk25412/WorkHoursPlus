@@ -13,11 +13,21 @@
             <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
-                        <a class="nav-link text-dark" href="/">Home</a>
+                        <NavLink class="nav-link text-dark"
+                                 ActiveClass="text-decoration-underline"
+                                 Match="NavLinkMatch.All"
+                                 href="/">
+                            Home
+                        </NavLink>
                     </li>
                     <AuthorizeView Roles="@($"{nameof(Roles.Superadmin)},{nameof(Roles.Manager)}")">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="/employee-list">Employees</a>
+                            <NavLink class="nav-link text-dark"
+                                     ActiveClass="text-decoration-underline"
+                                     Match="NavLinkMatch.All"
+                                     href="/employee-list">
+                                Employees
+                            </NavLink>
                         </li>
                     </AuthorizeView>
                 </ul>
