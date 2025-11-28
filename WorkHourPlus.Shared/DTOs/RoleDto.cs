@@ -1,3 +1,3 @@
 namespace WorkHourPlus.Shared.DTOs;
 
-public record RoleDto(int Id, int Name);
+public record RoleDto(int Id, string Name);

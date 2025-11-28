@@ -7,11 +7,13 @@
 @layout LoginLayout
 
 <EditForm Model="LoginModel" OnValidSubmit="@HandleSubmit" FormName="LoginForm">
+  <DataAnnotationsValidator/>
   @if (!string.IsNullOrEmpty(_errorMessage))
   {
-    <h5 class="my-3 text-danger">@_errorMessage</h5>
+    <h5 class="my-3 text-danger">
+      @_errorMessage
+    </h5>
   }
-  <DataAnnotationsValidator/>
   <div class="form-floating mb-4">
     <InputText id="username"
                class="form-control form-control-lg"
@@ -73,7 +75,7 @@
 
     var employee = user.Role is nameof(Roles.Superadmin)
       ? null
-      : await ServiceManager.EmployeeService.GetEmployeeById(user.EmployeeId ?? 0);
+      : await ServiceManager.EmployeeService.GetAllById(user.EmployeeId ?? 0);
 
     List<Claim> claims = [
       new(ClaimTypes.Name, employee?.Name ?? user.Username),

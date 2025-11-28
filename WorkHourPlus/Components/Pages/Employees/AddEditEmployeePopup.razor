@@ -1,42 +1,117 @@
+@using WorkHourPlus.Models
 @using WorkHourPlus.Shared.DTOs
 
-<RadzenTemplateForm Data="@_addEditEmployeeDto" Submit="Submit" TItem="AddEditEmployeeDto">
-    <div class="row">
-        <div class="col-12 col-md-6 col-lg-4 mb-2">
-            <div class="form-group">
-                <RadzenLabel Component="EmployeeName" Text="Name" />
-                <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Name" class="form-control" id="EmployeeName" />
-                <RadzenRequiredValidator Component="EmployeeName" Text="Name is required" Style="color:red" />
+@if (_addEditEmployeeDto is not null)
+{
+    <RadzenTemplateForm Data="@_addEditEmployeeDto" 
+                        Submit="Submit"
+                        TItem="AddEditEmployeeDto">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-6 mb-2">
+                <div class="form-group">
+                    <RadzenLabel Component="EmployeeName"
+                                 Text="Name" />
+                    <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Name"
+                                   class="form-control"
+                                   Name="EmployeeName" />
+                    <RadzenRequiredValidator Component="EmployeeName"
+                                             Text="Name is required"
+                                             Style="color:red" />
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6 mb-2">
+                <div class="form-group">
+                    <RadzenLabel Component="EmployeeEmail"
+                                 Text="Email" />
+                    <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Email"
+                                   class="form-control"
+                                   Name="EmployeeEmail" />
+                    <RadzenRequiredValidator Component="EmployeeEmail"
+                                             Text="Email is required"
+                                             Style="color:red" />
+                    <RadzenEmailValidator Component="EmployeeEmail"
+                                          Text="Please enter a valid Email"
+                                          Style="color:red"/>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <div class="form-group">
+                    <RadzenLabel Component="EmployeeGrade"
+                                 Text="Grade" />
+                    <RadzenDropDown Data="@_grades"
+                                    @bind-Value="_addEditEmployeeDto.GradeId"
+                                    TextProperty="Text"
+                                    ValueProperty="Value"
+                                    TValue="int?"
+                                    class="form-control"
+                                    Name="EmployeeGrade" />
+                    <RadzenRequiredValidator Component="EmployeeGrade"
+                                             Text="Grade is required"
+                                             Style="color:red" />
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <div class="form-group">
+                    <RadzenLabel Component="EmployeeRole"
+                                 Text="Role" />
+                    <RadzenDropDown Data="@_roles"
+                                    @bind-Value="_addEditEmployeeDto.RoleId"
+                                    TextProperty="Text"
+                                    ValueProperty="Value"
+                                    TValue="int?"
+                                    class="form-control"
+                                    Name="EmployeeRole" />
+                    <RadzenRequiredValidator Component="EmployeeRole"
+                                             Text="Role is required"
+                                             Style="color:red" />
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-2">
+                <div class="form-group">
+                    <RadzenLabel Component="EmployeeManager"
+                                 Text="Manager" />
+                    <RadzenDropDown Data="@_managers"
+                                    @bind-Value="_addEditEmployeeDto.ManagerId"
+                                    TextProperty="Text"
+                                    ValueProperty="Value"
+                                    TValue="int?"
+                                    class="form-control"
+                                    Name="EmployeeManager" />
+                    <RadzenRequiredValidator Component="EmployeeManager"
+                                             Text="Manager is required"
+                                             Style="color:red" />
+                </div>
             </div>
         </div>
-        <div class="col-12 col-md-6 col-lg-4 mb-2">
-            <div class="form-group">
-                <RadzenLabel Component="EmployeeEmail" Text="Email" />
-                <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Email" class="form-control" id="EmployeeEmail" />
-            </div>
+        <div class="d-flex justify-content-end mt-3 gap-2">
+            <RadzenButton ButtonType="ButtonType.Submit"
+                          Text="Save" />
+            <RadzenButton ButtonType="ButtonType.Button"
+                          Click="@(_ => DialogService.Close(null))"
+                          Text="Cancel" />
         </div>
-        <div class="col-12 col-md-6 col-lg-4 mb-2">
-            <div class="form-group">
-                <RadzenLabel Component="Grade" Text="Email" />
-                <RadzenTextBox @bind-Value="@_addEditEmployeeDto.Email" class="form-control" id="Grade" />
-            </div>
-        </div>
-    </div>
-    <div class="d-flex justify-content-end">
-        <RadzenButton ButtonType="ButtonType.Submit" Style="margin-right: 10px;" Text="Save" />
-        <RadzenButton ButtonType="ButtonType.Button" Click="@(args => DialogService.Close(null))" Text="Cancel" />
-    </div>
-</RadzenTemplateForm>
-
+    </RadzenTemplateForm>
+}
 
 @code {
 
     [Parameter] public EmployeeDto? EmployeeDto { get; set; }
 
-    private AddEditEmployeeDto _addEditEmployeeDto = new();
+    private AddEditEmployeeDto? _addEditEmployeeDto;
+    private List<DropdownDto<int>> _grades = [];
+    private List<DropdownDto<int>> _roles = [];
+    private List<DropdownDto<int>> _managers = [];
 
     protected override async Task OnInitializedAsync()
     {
+        var grades = await ServiceManager.GradeService.GetAll();
+        var roles = await ServiceManager.RoleService.GetAll();
+        var employees = await ServiceManager.EmployeeService.GetAll();
+        
+        _grades = grades.Select(x => new DropdownDto<int>(x.Name, x.Id)).ToList();
+        _roles = roles.Select(x => new DropdownDto<int>(x.Name, x.Id)).ToList();
+        _managers = employees.Select(x => new DropdownDto<int>(x.Name, x.Id)).ToList();
+        
         if (EmployeeDto is not null)
         {
             _addEditEmployeeDto = new AddEditEmployeeDto()
@@ -49,10 +124,14 @@
                 ManagerId = EmployeeDto.ManagerId
             };
         }
+        else
+        {
+            _addEditEmployeeDto = new AddEditEmployeeDto();
+        }
     }
 
     private void Submit(AddEditEmployeeDto addEditEmployeeDto)
     {
-
+        
     }
 }

@@ -7,7 +7,12 @@ namespace WorkHourPlus.Repositories;
 public sealed class EmployeeRepository(RepositoryContext dbContext) 
     : RepositoryBase<Employee>(dbContext), IEmployeeRepository
 {
-    public async Task<List<Employee>> GetAllEmployees(int managerId, bool includeGrade = false,
+    public async Task<List<Employee>> GetAll()
+    {
+        return await FindAll().ToListAsync();
+    }
+    
+    public async Task<List<Employee>> GetAll(int managerId, bool includeGrade = false,
         bool includeRole = false, bool includeManager = false)
     {
         var employees = managerId is 0
@@ -26,7 +31,7 @@ public sealed class EmployeeRepository(RepositoryContext dbContext)
         return await employees.ToListAsync();
     }
 
-    public async Task<Employee?> GetEmployeeById(int id)
+    public async Task<Employee?> GetAllById(int id)
     {
         var employee = await FindByCondition(x => x.Id == id)
                 .FirstOrDefaultAsync();

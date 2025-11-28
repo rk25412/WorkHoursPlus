@@ -1,11 +1,10 @@
 @page "/employee-list"
-@using WorkHourPlus.Components.Shared
 @using WorkHourPlus.Entities.Enums
 @using WorkHourPlus.Shared.DTOs
 
 @attribute [Authorize(Roles = $"{nameof(Roles.Superadmin)},{nameof(Roles.Manager)}")]
 
-<PageTitle>Employee List</PageTitle>
+<PageTitle>Manage Employees</PageTitle>
 
 <div class="d-flex justify-content-between mb-3">
     <h3>Employee List</h3>
@@ -15,18 +14,32 @@
 <Card>
     @if (_employees.Any())
     {
-        <RadzenDataGrid AllowSorting="@true" AllowFiltering="@true" AllowAlternatingRows="@true"
-            FilterMode="@FilterMode.Simple" PageSize="10" AllowPaging="@true" PagerHorizontalAlign="@HorizontalAlign.Left"
-            ShowPagingSummary="@true" Data="@_employees">
+        <RadzenDataGrid AllowSorting="@true"
+                        AllowFiltering="@true"
+                        AllowAlternatingRows="@true"
+                        FilterMode="@FilterMode.Simple"
+                        PageSize="10" AllowPaging="@true"
+                        PagerHorizontalAlign="@HorizontalAlign.Left"
+                        ShowPagingSummary="@true"
+                        Data="@_employees">
             <Columns>
-                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Id)" Width="50px" Title="#" Filterable="false"
-                    TextAlign="TextAlign.Center" />
+                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Id)"
+                                      Width="50px"
+                                      Title="#"
+                                      Filterable="false"
+                                      TextAlign="TextAlign.Center" />
 
-                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Name)" Title="Name" TextAlign="TextAlign.Left" />
+                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Name)"
+                                      Title="Name"
+                                      TextAlign="TextAlign.Left" />
 
-                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Email)" Title="Email" TextAlign="TextAlign.Left" />
+                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Email)"
+                                      Title="Email"
+                                      TextAlign="TextAlign.Left" />
 
-                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Email)" Title="Email" TextAlign="TextAlign.Left" />
+                <RadzenDataGridColumn Property="@nameof(EmployeeDto.Email)"
+                                      Title="Email"
+                                      TextAlign="TextAlign.Left" />
             </Columns>
         </RadzenDataGrid>
     }
@@ -44,16 +57,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _employees = await ServiceManager.EmployeeService.GetAllEmployees(EmployeeId);
+        _employees = await ServiceManager.EmployeeService.GetAll(EmployeeId);
     }
 
     private async Task OpenAddEditEmployeeDto(EmployeeDto? dto)
     {
-        var newEmployeeData = await DialogService.OpenAsync<AddEditEmployeePopup>(
-        dto is null ? "Add new Employee" : "Edit Employee",
-        new Dictionary<string, object?>
-        {
-            ["EmployeeDto"] = dto
-        });
+        AddEditEmployeeDto newEmployeeData = await DialogService.OpenAsync<AddEditEmployeePopup>(
+            dto is null ? "Add new Employee" : "Edit Employee",
+            new Dictionary<string, object?>
+            {
+                ["EmployeeDto"] = dto
+            });
+        
+        
     }
 }

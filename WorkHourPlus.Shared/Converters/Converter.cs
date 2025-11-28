@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using WorkHourPlus.Entities.Models;
 using WorkHourPlus.Shared.DTOs;
 
@@ -49,6 +48,24 @@ public static class Converter
         public List<GradeDto> ToGradeDto()
         {
             return [.. grades.Select(x => x.ToGradeDto()!)];
+        }
+    }
+
+    extension(Role? role)
+    {
+        public RoleDto? ToRoleDto()
+        {
+            return role is null
+                ? null
+                : new RoleDto(role.Id, role.Name);
+        }
+    }
+
+    extension(IEnumerable<Role> roles)
+    {
+        public IEnumerable<RoleDto> ToRoleDto()
+        {
+            return roles.Select(x => x.ToRoleDto()!);
         }
     }
 }
