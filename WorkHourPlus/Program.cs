@@ -47,4 +47,6 @@ app.MapGet("/logout", async context =>
     context.Response.Redirect("/login");
 });
 
+app.MigrateDatabase();
+
 app.Run();

@@ -18,5 +18,6 @@ public sealed class RepositoryManager(RepositoryContext dbContext) : IRepository
     public IRoleRepository RoleRepository => _roleRepository.Value;
     public IShiftRepository ShiftRepository => _shiftRepository.Value;
     public IUserRepository UserRepository => _userRepository.Value;
-    public void Save() => dbContext.SaveChanges();
+    public Task SaveAsync() => dbContext.SaveChangesAsync();
+    public void Detach() => dbContext.ChangeTracker.Clear();
 }

@@ -12,7 +12,7 @@
 </div>
 
 <Card>
-    @if (_employees.Any())
+    @if (_employees.Count > 0)
     {
         <RadzenDataGrid AllowSorting="@true"
                         AllowFiltering="@true"
@@ -40,6 +40,16 @@
                 <RadzenDataGridColumn Property="@nameof(EmployeeDto.Email)"
                                       Title="Email"
                                       TextAlign="TextAlign.Left" />
+                
+                <RadzenDataGridColumn Title="Actions">
+                    <Template>
+                        @if (context is EmployeeDto dto)
+                        {
+                            <RadzenButton Text="Edit" />
+                            <RadzenButton Text="Delete" />
+                        }
+                    </Template>
+                </RadzenDataGridColumn>
             </Columns>
         </RadzenDataGrid>
     }
@@ -62,7 +72,7 @@
 
     private async Task OpenAddEditEmployeeDto(EmployeeDto? dto)
     {
-        AddEditEmployeeDto newEmployeeData = await DialogService.OpenAsync<AddEditEmployeePopup>(
+        AddEditEmployeeDto addEditEmployeeData = await DialogService.OpenAsync<AddEditEmployeePopup>(
             dto is null ? "Add new Employee" : "Edit Employee",
             new Dictionary<string, object?>
             {

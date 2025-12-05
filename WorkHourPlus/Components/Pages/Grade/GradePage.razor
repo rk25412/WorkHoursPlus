@@ -1,0 +1,105 @@
+@page "/grade-list"
+@using WorkHourPlus.Shared.DTOs
+
+<PageTitle>Manage Grades</PageTitle>
+
+<div class="d-flex justify-content-between mb-3">
+    <h3>Grade List</h3>
+    <RadzenButton Click="@(() => OpenAddEditGradePopup(null))">
+        Add
+    </RadzenButton>
+</div>
+
+<Card>
+    @if (_grades.Count > 0)
+    {
+        <RadzenDataGrid AllowSorting="@true"
+                        AllowFiltering="@true"
+                        AllowAlternatingRows="@true"
+                        FilterMode="@FilterMode.Simple"
+                        PageSize="10" AllowPaging="@true"
+                        PagerHorizontalAlign="@HorizontalAlign.Left"
+                        ShowPagingSummary="@true"
+                        Data="_grades">
+            <Columns>
+                <RadzenDataGridColumn Property="@nameof(GradeDto.Id)"
+                                      Width="50px"
+                                      Title="#"
+                                      Filterable="false"
+                                      TextAlign="TextAlign.Center" />
+                
+                <RadzenDataGridColumn Property="@nameof(GradeDto.Name)"
+                                      Title="Name"
+                                      TextAlign="TextAlign.Left" />
+
+                <RadzenDataGridColumn Title="Actions">
+                    <Template>
+                        <RadzenButton Text="Edit"
+                                      Click="() => OpenAddEditGradePopup(context)" />
+                        <RadzenButton Text="Delete"
+                                      Click="() => Delete(context)" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+    }
+    else
+    {
+        <h5 class="text-center">No Data Available</h5>
+    }
+</Card>
+
+@code {
+    private List<GradeDto> _grades = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetAllGrades();
+    }
+
+    private async Task GetAllGrades()
+    {
+        _grades = await ServiceManager.GradeService.GetAll();
+    }
+
+    private async Task OpenAddEditGradePopup(GradeDto? dto)
+    {
+        AddEditGradeDto? addEditGradeDto = await DialogService.OpenAsync<AddEditGradePopup>(
+            dto is null ? "Add new Grade" : "Edit Grade",
+            new Dictionary<string, object?>
+            {
+                ["GradeDto"] = dto
+            });
+
+        if (addEditGradeDto is not null)
+        {
+            var task = addEditGradeDto.Id is 0
+                ? ServiceManager.GradeService.Add(addEditGradeDto)
+                : ServiceManager.GradeService.Edit(addEditGradeDto);
+
+            await task;
+            
+            NotificationService.Notify(NotificationSeverity.Success, "Success", "Grade information saved successfully");
+            
+            await GetAllGrades();
+        }
+    }
+
+    private async Task Delete(GradeDto gradeDto)
+    {
+        var confirm = await DialogService.Confirm(GetDeleteMessage(gradeDto), "Delete?");
+        if (confirm is true)
+        {
+            await ServiceManager.GradeService.Delete(gradeDto);
+            NotificationService.Notify(NotificationSeverity.Success, "Success", "Grade deleted successfully");
+            await GetAllGrades();
+        }
+    }
+
+    private RenderFragment GetDeleteMessage(GradeDto dto)
+    {
+        return @<div>
+                   Are you sure, you want to delete <b>@dto.Name</b>
+               </div>;
+    }
+}

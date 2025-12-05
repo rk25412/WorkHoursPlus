@@ -30,6 +30,16 @@
                             </NavLink>
                         </li>
                     </AuthorizeView>
+                    <AuthorizeView Roles="@($"{nameof(Roles.Superadmin)}")">
+                        <li class="nav-item">
+                            <NavLink class="nav-link text-dark"
+                                     ActiveClass="text-decoration-underline"
+                                     Match="NavLinkMatch.All"
+                                     href="/grade-list">
+                                Grade
+                            </NavLink>
+                        </li>
+                    </AuthorizeView>
                 </ul>
                 <div class="flex">
                     <AuthorizeView>

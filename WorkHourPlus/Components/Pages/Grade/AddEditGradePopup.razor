@@ -1,0 +1,59 @@
+@using WorkHourPlus.Shared.DTOs
+
+<RadzenTemplateForm Data="@_addEditGradeDto"
+                    Submit="Submit"
+                    TItem="AddEditGradeDto">
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <RadzenLabel Component="GradeName"
+                             Text="Name" />
+                <RadzenTextBox @bind-Value="@_addEditGradeDto!.Name"
+                               class="form-control"
+                               Name="GradeName" />
+                <RadzenRequiredValidator Component="GradeName"
+                                         Text="Name is required"
+                                         Style="color:red" />
+            </div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-end mt-3 gap-2">
+        <RadzenButton ButtonType="ButtonType.Submit"
+                      Text="Save" />
+        <RadzenButton ButtonType="ButtonType.Button"
+                      Click="@(_ => DialogService.Close(null))"
+                      Text="Cancel" />
+    </div>
+</RadzenTemplateForm>
+
+
+@code {
+    [Parameter] public GradeDto? GradeDto { get; set; }
+
+    private AddEditGradeDto? _addEditGradeDto;
+    private List<GradeDto> _allGrades = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        var grades = await ServiceManager.GradeService.GetAll();
+        if (GradeDto is not null)
+        {
+            _addEditGradeDto = new AddEditGradeDto()
+            {
+                Id = GradeDto.Id,
+                Name = GradeDto.Name
+            };
+            _allGrades = [..grades.Where(x => x.Name != GradeDto.Name)];
+        }
+        else
+        {
+            _addEditGradeDto = new AddEditGradeDto();
+            _allGrades = [..grades];
+        }
+    }
+
+    private void Submit(AddEditGradeDto dto)
+    {
+        DialogService.Close(dto);
+    }
+}

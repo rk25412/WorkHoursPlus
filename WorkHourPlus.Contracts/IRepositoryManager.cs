@@ -8,5 +8,6 @@ public interface IRepositoryManager
     IRoleRepository RoleRepository { get; }
     IShiftRepository ShiftRepository { get; }
     IUserRepository UserRepository { get; }
-    void Save();
+    Task SaveAsync();
+    void Detach();
 }

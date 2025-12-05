@@ -68,4 +68,32 @@ public static class Converter
             return roles.Select(x => x.ToRoleDto()!);
         }
     }
+
+    extension(GradeDto? gradeDto)
+    {
+        public Grade? ToGrade()
+        {
+            return gradeDto is null
+                ? null
+                : new Grade()
+                {
+                    Id = gradeDto.Id,
+                    Name = gradeDto.Name,
+                };
+        }
+    }
+
+    extension(AddEditGradeDto? addEditGradeDto)
+    {
+        public Grade? ToGrade()
+        {
+            return addEditGradeDto is null
+                ? null
+                : new Grade()
+                {
+                    Id = addEditGradeDto.Id,
+                    Name = addEditGradeDto.Name,
+                };
+        }
+    }
 }
