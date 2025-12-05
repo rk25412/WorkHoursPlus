@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WorkHourPlus.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class DbCreation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,6 +38,22 @@ namespace WorkHourPlus.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Username = table.Column<string>(type: "TEXT", nullable: false),
+                    Password = table.Column<string>(type: "TEXT", nullable: false),
+                    Role = table.Column<string>(type: "TEXT", nullable: false),
+                    EmployeeId = table.Column<int>(type: "INTEGER", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
                 {
@@ -46,11 +62,17 @@ namespace WorkHourPlus.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Email = table.Column<string>(type: "TEXT", nullable: false),
                     GradeId = table.Column<int>(type: "INTEGER", nullable: false),
-                    RoleId = table.Column<int>(type: "INTEGER", nullable: false)
+                    RoleId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ManagerId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Employees_Employees_ManagerId",
+                        column: x => x.ManagerId,
+                        principalTable: "Employees",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Employees_Grades_GradeId",
                         column: x => x.GradeId,
@@ -114,10 +136,20 @@ namespace WorkHourPlus.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "EmployeeId", "Password", "Role", "Username" },
+                values: new object[] { 1, 0, "Superadmin", "Superadmin", "Superadmin" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_GradeId",
                 table: "Employees",
                 column: "GradeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Employees_ManagerId",
+                table: "Employees",
+                column: "ManagerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_RoleId",
@@ -137,8 +169,7 @@ namespace WorkHourPlus.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Shifts_EmployeeId",
                 table: "Shifts",
-                column: "EmployeeId",
-                unique: true);
+                column: "EmployeeId");
         }
 
         /// <inheritdoc />
@@ -149,6 +180,9 @@ namespace WorkHourPlus.Migrations
 
             migrationBuilder.DropTable(
                 name: "Shifts");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Employees");

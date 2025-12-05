@@ -11,8 +11,8 @@ using WorkHourPlus.Repositories;
 namespace WorkHourPlus.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20251125122934_AddedManagerColumnInEmployeeTable")]
-    partial class AddedManagerColumnInEmployeeTable
+    [Migration("20251205005351_DbCreation")]
+    partial class DbCreation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -139,7 +139,7 @@ namespace WorkHourPlus.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("EmployeeId")
+                    b.Property<int?>("EmployeeId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Password")

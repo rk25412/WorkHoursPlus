@@ -32,7 +32,9 @@
                                       Title="Name"
                                       TextAlign="TextAlign.Left" />
 
-                <RadzenDataGridColumn Title="Actions">
+                <RadzenDataGridColumn Title="Actions"
+                                      TextAlign="TextAlign.Center"
+                                      Sortable="false">
                     <Template>
                         <RadzenButton Text="Edit"
                                       Click="() => OpenAddEditGradePopup(context)" />
@@ -87,7 +89,7 @@
 
     private async Task Delete(GradeDto gradeDto)
     {
-        var confirm = await DialogService.Confirm(GetDeleteMessage(gradeDto), "Delete?");
+        var confirm = await DialogService.Confirm(GetDeleteConfirmationMessage(gradeDto), "Delete?");
         if (confirm is true)
         {
             await ServiceManager.GradeService.Delete(gradeDto);
@@ -96,7 +98,7 @@
         }
     }
 
-    private RenderFragment GetDeleteMessage(GradeDto dto)
+    private RenderFragment GetDeleteConfirmationMessage(GradeDto dto)
     {
         return @<div>
                    Are you sure, you want to delete <b>@dto.Name</b>

@@ -11,6 +11,7 @@ public class GradeService(IRepositoryManager repositoryManager) : IGradeService
     public async Task<List<GradeDto>> GetAll()
     {
         var grades = await repositoryManager.GradeRepository.GetAll();
+        repositoryManager.Detach();
         return grades.ToGradeDto();
     }
 
@@ -19,6 +20,7 @@ public class GradeService(IRepositoryManager repositoryManager) : IGradeService
         var grade = dto.ToGrade()!;
         repositoryManager.GradeRepository.Add(grade);
         await repositoryManager.SaveAsync();
+        repositoryManager.Detach();
         dto.Id = grade.Id;
     }
 
@@ -27,11 +29,13 @@ public class GradeService(IRepositoryManager repositoryManager) : IGradeService
         var grade = dto.ToGrade();
         repositoryManager.GradeRepository.Update(grade!);
         await repositoryManager.SaveAsync();
+        repositoryManager.Detach();
     }
 
     public async Task Delete(GradeDto dto)
     {
         repositoryManager.GradeRepository.Delete(new Grade { Id = dto.Id });
         await repositoryManager.SaveAsync();
+        repositoryManager.Detach();
     }
 }
